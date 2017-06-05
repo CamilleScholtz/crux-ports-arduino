@@ -1,0 +1,19 @@
+# Description: Arduino AVR core with upstream avr-gcc and avrdude.
+# URL:         https://github.com/arduino/Arduino
+# Maintainer:  onodera, https://github.com/onodra-punpun/crux-ports/issues
+# Depends on:  avrdude avr-libc
+
+name=arduino-avr-core
+version=1.6.18
+release=1
+source=(https://downloads.arduino.cc/cores/avr-$version.tar.bz2)
+
+build() {
+	cd avr
+
+	find . -name "*.elf" -type f -exec rm -f {} \;
+	find . -name "*.a" -type f -exec rm -f {} \;
+
+	install -dm755 $PKG/usr/share/arduino/hardware/arduino
+	cp -a $SRC/avr $PKG/usr/share/arduino/hardware/arduino
+}

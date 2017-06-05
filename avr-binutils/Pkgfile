@@ -1,0 +1,43 @@
+# Description: A set of programs to assemble and manipulate binary and object files for the AVR architecture.
+# URL:         http://sources.redhat.com/binutils/
+# Maintainer:  onodera, https://github.com/onodra-punpun/crux-ports/issues
+# Depends on:
+
+name=avr-binutils
+version=2.27
+release=1
+source=(
+	http://ftpmirror.gnu.org/gnu/binutils/binutils-$version.tar.bz2
+	avr-size.patch
+)
+
+build() {
+	cd binutils-$version
+
+	sed -i '/^SUBDIRS/s/doc//' bfd/Makefile.in
+	patch -p0 < $SRC/avr-size.patch
+
+	config_guess=$(./config.guess)
+	./configure --prefix=/usr \
+		--enable-languages=c,c++ \
+		--disable-nls \
+		--enable-ld=default \
+		--enable-gold=yes \
+		--enable-plugins \
+		--disable-werror \
+		--enable-install-libbfd \
+		--build=${config_guess} \
+		--with-pic \
+		--target=avr
+
+	make configure-host
+	make tooldir=/usr
+	make tooldir=/usr DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/info
+	rm $PKG/usr/share/man/man1/avr-{dlltool,nlmconv,windres,windmc}.1
+
+	for bin in ar as nm objcopy objdump ranlib strip readelf; do
+		rm -f $PKG/usr/bin/$bin
+	done
+}

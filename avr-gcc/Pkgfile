@@ -1,0 +1,62 @@
+# Description: The GNU AVR Compiler Collection.
+# URL:         http://gcc.gnu.org
+# Maintainer:  onodera, https://github.com/onodra-punpun/crux-ports/issues
+# Depends on:  avr-binutils
+
+name=avr-gcc
+version=6.3.0
+release=1
+source=(
+	ftp://gcc.gnu.org/pub/gcc/releases/gcc-$version/gcc-$version.tar.bz2
+	gcc-nocheck-fixincludes.patch
+	gcc-4.7.3-multilib-dirs.patch
+)
+
+build() {
+	cd gcc-$version
+
+	patch -p1 < $SRC/gcc-nocheck-fixincludes.patch
+	patch -p1 < $SRC/gcc-4.7.3-multilib-dirs.patch
+
+	export CFLAGS_FOR_TARGET='-O2 -pipe'
+	export CXXFLAGS_FOR_TARGET='-O2 -pipe'
+
+	mkdir gcc-build && cd gcc-build
+	../configure --prefix=/usr \
+		--libexecdir=/usr/lib \
+		--enable-languages=c,c++ \
+		--enable-__cxa_atexit \
+		--enable-clocale=gnu \
+		--enable-long-long \
+		--disable-shared \
+		--disable-nls \
+		--disable-checking \
+		--enable-fixed-point \
+		--with-x=no \
+		--with-system-zlib \
+		--with-pkgversion="CRUX-avr" \
+		--target=avr \
+		--with-gnu-as \
+		--with-gnu-ld \
+		--with-as=/usr/bin/avr-as \
+		--with-ld=/usr/bin/avr-ld \
+		--with-plugin-ld=ld.gold \
+		--with-system-zlib \
+		--enable-gnu-indirect-function \
+		--disable-libssp \
+		--disable-libada \
+		--with-dwarf2 \
+		--with-avrlibc=yes \
+		--enable-lto \
+		--disable-linker-build-id
+
+	make
+	make -j1 DESTDIR=$PKG install
+
+	mv $PKG/usr/lib/gcc/*/$version/include-fixed/{limits.h,syslimits.h} $PKG/usr/lib/gcc/*/$version/include/
+	rm -f $PKG/usr/lib{,32}/{libiberty.a,libstdc++.so.6.0.21-gdb.py}
+	rm -r $PKG/usr/share/info
+	rm -r $PKG/usr/share/man
+    rm -r $PKG/usr/lib/gcc/avr/$version/{install-tools,include-fixed}
+    rm -r $PKG/usr/lib/libcc1.*
+}

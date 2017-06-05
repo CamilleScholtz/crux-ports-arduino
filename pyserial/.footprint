@@ -1,0 +1,18 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/bin/
+-rwxr-xr-x	root/root	usr/bin/avrdude
+drwxr-xr-x	root/root	usr/etc/
+-rw-r--r--	root/root	usr/etc/avrdude.conf
+-rw-r--r--	root/root	usr/etc/avrdude.conf.bak
+drwxr-xr-x	root/root	usr/include/
+-rw-r--r--	root/root	usr/include/libavrdude.h
+drwxr-xr-x	root/root	usr/lib/
+-rw-r--r--	root/root	usr/lib/libavrdude.a
+-rwxr-xr-x	root/root	usr/lib/libavrdude.la
+lrwxrwxrwx	root/root	usr/lib/libavrdude.so -> libavrdude.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib/libavrdude.so.1 -> libavrdude.so.1.0.0
+-rwxr-xr-x	root/root	usr/lib/libavrdude.so.1.0.0
+drwxr-xr-x	root/root	usr/share/
+drwxr-xr-x	root/root	usr/share/man/
+drwxr-xr-x	root/root	usr/share/man/man1/
+-rw-r--r--	root/root	usr/share/man/man1/avrdude.1.gz

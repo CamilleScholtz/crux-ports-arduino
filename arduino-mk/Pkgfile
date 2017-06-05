@@ -1,21 +1,15 @@
-# Description: Arduino AVR core with upstream avr-gcc and avrdude.
-# URL:         https://github.com/sudar/Arduino-Makefile
+# Description: Python serial port access library.
+# URL:         https://github.com/pyserial/pyserial
 # Maintainer:  onodera, https://github.com/onodra-punpun/crux-ports/issues
-# Depends on:  arduino-avr-core
+# Depends on:  python
 
-name=arduino-mk
-version=1.5.2
+name=pyserial
+version=3.3
 release=1
-source=(https://github.com/sudar/Arduino-Makefile/archive/$version.tar.gz)
+source=(https://github.com/$name/$name/archive/v$version.tar.gz)
 
 build() {
-	cd Arduino-Makefile-$version
+	cd $name-$version
 
-	mkdir -p $PKG/usr/bin
-	mkdir -p $PKG/usr/share/arduino
-	mkdir -p $PKG/usr/share/man/man1
-
-	install -m755 bin/ard-reset-arduino $PKG/usr/bin/
-	install -m644 *.mk arduino-mk-vars.md $PKG/usr/share/arduino/
-	install -m644 ard-reset-arduino.1 $PKG/usr/share/man/man1/
+	python setup.py install --root=$PKG
 }
